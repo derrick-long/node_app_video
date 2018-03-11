@@ -1,6 +1,16 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const app = express();
+const mongoose = require('mongoose');
+
+
+// connect to mongoose
+mongoose.connect('mongodb://localhost/video-notes',{
+ 
+})
+.then(()=>console.log('MongoDB Connected...'))
+.catch(err=> console.log(err));
+
 
 //handlebars middleware
 app.engine('handlebars', exphbs({
