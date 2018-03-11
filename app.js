@@ -6,10 +6,14 @@ const mongoose = require('mongoose');
 
 // connect to mongoose
 mongoose.connect('mongodb://localhost/video-notes',{
- 
+
 })
 .then(()=>console.log('MongoDB Connected...'))
 .catch(err=> console.log(err));
+
+//Load Idea Model
+require('./models/Idea');
+const Idea = mongoose.model('ideas');
 
 
 //handlebars middleware
