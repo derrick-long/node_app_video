@@ -127,9 +127,9 @@ app.put('/ideas/:id', (req, res)=>{
 
 // Delete posted ideas
 
-app.delete('ideas/:id', (res,req)=>{
+app.delete('/ideas/:id', (req, res) => {
   Idea.remove({_id: req.params.id})
-    .then(()=> {
+    .then(() => {
       res.redirect('/ideas');
     });
 });
