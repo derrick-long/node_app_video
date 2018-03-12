@@ -3,7 +3,7 @@ const exphbs = require('express-handlebars');
 const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-
+const methodOverride = require('method-override');
 // connect to mongoose
 mongoose.connect('mongodb://localhost/video-notes',{
 
@@ -29,6 +29,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
+
+//methodoveeride middleware
+app.use(methodOverride('_method'));
 
 // index route
 app.get('/', (req, res)=>{
@@ -103,6 +106,15 @@ app.post('/ideas', (req,res)=>{
    });
  }
 });
+
+// Edit form
+
+app.put('/ideas/:id', (req, res)=>{
+  res.send('PUT');
+});
+
+
+
 
 const port = 5000;
 
