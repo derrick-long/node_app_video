@@ -125,7 +125,14 @@ app.put('/ideas/:id', (req, res)=>{
 });
 
 
+// Delete posted ideas
 
+app.delete('ideas/:id', (res,req)=>{
+  Idea.remove({_id: req.params.id})
+    .then(()=> {
+      res.redirect('/ideas');
+    });
+});
 
 const port = 5000;
 
