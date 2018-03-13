@@ -3,20 +3,11 @@ const exphbs = require('express-handlebars');
 const app = express();
 const flash = require('connect-flash');
 const session = require('express-session');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
-// connect to mongoose
-mongoose.connect('mongodb://localhost/video-notes',{
 
-})
-.then(()=>console.log('MongoDB Connected...'))
-.catch(err=> console.log(err));
-
-//Load Idea Model
-require('./models/Idea');
-const Idea = mongoose.model('ideas');
-
+// load routes
+const ideas = require('./routes/ideas');
 
 //handlebars middleware
 app.engine('handlebars', exphbs({
@@ -66,95 +57,21 @@ app.get('/about', (req, res)=>{
   res.render('about');
 });
 
-// Idea list
 
-app.get('/ideas',(req, res)=>{
-  Idea.find({})
-  .sort({date: 'desc'})
-  .then(ideas =>{
-    res.render('ideas/index', {
-      ideas: ideas
-    });
-  });
+// Login route
+app.get('/users/login', (req,res)=> {
+  res.send('login');
 });
 
-
-
-// idea form
-app.get('/ideas/add', (req, res)=>{
-  res.render('ideas/add');
+app.get('/users/register', (req,res)=> {
+  res.send('register');
 });
-// edit idea form
-app.get('/ideas/edit/:id', (req, res)=>{
-  Idea.findOne({
-    _id: req.params.id
-  })
-  .then(idea => {
-      res.render('ideas/edit',{
-        idea:idea
-      });
-  });
+//
 
-});
+//use routes
 
-//process form to /ideas
+app.use('/ideas', ideas);
 
-app.post('/ideas', (req,res)=>{
-  let errors = [];
-  if(!req.body.title){
-    errors.push({text: 'Please add a title'});
-  }
-  if(!req.body.details){
-    errors.push({text: 'Please add some details'});
-  }
-  if(errors.length > 0){
-    res.render('ideas/add',{
-     errors: errors,
-     title: req.body.title,
-     details: req.body.details
-   });
- } else {
-   const newUser = {
-     title: req.body.title,
-     details: req.body.details
-   };
-   new Idea(newUser)
-   .save()
-   .then(idea => {
-    req.flash('success_msg', 'Video notes added!');
-     res.redirect('/ideas');
-   });
- }
-});
-
-// Edit form
-
-app.put('/ideas/:id', (req, res)=>{
-  Idea.findOne({
-    _id: req.params.id
-  })
-  .then(idea=> {
-    idea.title = req.body.title;
-    idea.details = req.body.details;
-
-    idea.save()
-      .then(idea=> {
-        req.flash('success_msg', 'Video notes updated!');
-        res.redirect('/ideas');
-      });
-  });
-});
-
-
-// Delete posted ideas
-
-app.delete('/ideas/:id', (req, res) => {
-  Idea.remove({_id: req.params.id})
-    .then(() => {
-      req.flash('success_msg', 'Video notes removed');
-      res.redirect('/ideas');
-    });
-});
 
 const port = 5000;
 
