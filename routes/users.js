@@ -13,7 +13,7 @@ mongoose.connect('mongodb://localhost/video-notes',{
 
 // Login route
 router.get('/login', (req,res)=> {
-  res.send('login');
+  res.render('users/login');
 });
 
 router.get('/register', (req,res)=> {
