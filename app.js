@@ -1,6 +1,8 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const app = express();
+const flash = require('connect-flash');
+const session = require('express-session');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
@@ -32,6 +34,23 @@ app.use(bodyParser.json());
 
 //methodoveeride middleware
 app.use(methodOverride('_method'));
+
+// express-session middleware
+app.use(session({
+  secret: 'dog barks' ,
+  resave: true,
+  saveUninitialized: true
+}));
+
+app.use(flash());
+
+//global vars
+app.use(function(req,res,next){
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 // index route
 app.get('/', (req, res)=>{
@@ -83,10 +102,10 @@ app.get('/ideas/edit/:id', (req, res)=>{
 app.post('/ideas', (req,res)=>{
   let errors = [];
   if(!req.body.title){
-    errors.push({text: 'Please add a title'})
+    errors.push({text: 'Please add a title'});
   }
   if(!req.body.details){
-    errors.push({text: 'Please add some details'})
+    errors.push({text: 'Please add some details'});
   }
   if(errors.length > 0){
     res.render('ideas/add',{
@@ -102,6 +121,7 @@ app.post('/ideas', (req,res)=>{
    new Idea(newUser)
    .save()
    .then(idea => {
+    req.flash('success_msg', 'Video notes added!');
      res.redirect('/ideas');
    });
  }
@@ -119,6 +139,7 @@ app.put('/ideas/:id', (req, res)=>{
 
     idea.save()
       .then(idea=> {
+        req.flash('success_msg', 'Video notes updated!');
         res.redirect('/ideas');
       });
   });
@@ -130,6 +151,7 @@ app.put('/ideas/:id', (req, res)=>{
 app.delete('/ideas/:id', (req, res) => {
   Idea.remove({_id: req.params.id})
     .then(() => {
+      req.flash('success_msg', 'Video notes removed');
       res.redirect('/ideas');
     });
 });
