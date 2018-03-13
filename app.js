@@ -8,7 +8,7 @@ const methodOverride = require('method-override');
 
 // load routes
 const ideas = require('./routes/ideas');
-
+const users = require('./routes/users');
 //handlebars middleware
 app.engine('handlebars', exphbs({
   defaultLayout: 'main'
@@ -58,20 +58,12 @@ app.get('/about', (req, res)=>{
 });
 
 
-// Login route
-app.get('/users/login', (req,res)=> {
-  res.send('login');
-});
-
-app.get('/users/register', (req,res)=> {
-  res.send('register');
-});
-//
 
 //use routes
 
 app.use('/ideas', ideas);
 
+app.use('/users', users);
 
 const port = 5000;
 
