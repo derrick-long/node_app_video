@@ -5,7 +5,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
-
+const path = require('path');
 // load routes
 const ideas = require('./routes/ideas');
 const users = require('./routes/users');
@@ -22,6 +22,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
+//Static folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 //methodoveeride middleware
 app.use(methodOverride('_method'));
