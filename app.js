@@ -6,9 +6,18 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const path = require('path');
+const mongoose = require('mongoose');
 // load routes
 const ideas = require('./routes/ideas');
 const users = require('./routes/users');
+
+
+mongoose.connect('mongodb://localhost/video-notes',{
+
+})
+.then(()=>console.log('MongoDB Connected...'))
+.catch(err=> console.log(err));
+
 //handlebars middleware
 app.engine('handlebars', exphbs({
   defaultLayout: 'main'
