@@ -6,11 +6,15 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const path = require('path');
+const passport = require('passport');
 const mongoose = require('mongoose');
 // load routes
 const ideas = require('./routes/ideas');
 const users = require('./routes/users');
 
+
+//passport configuration
+require('./config/passport')(passport);
 
 mongoose.connect('mongodb://localhost/video-notes',{
 

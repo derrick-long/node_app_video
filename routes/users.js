@@ -13,7 +13,7 @@ router.get('/login', (req, res) => {
 });
 
 // login form post
-router.post('/logoin', (req,res, next)=>{
+router.post('/login', (req,res, next)=>{
   passport.authenticate('local',{
     successRedirect: '/ideas',
     failureRedirect: '/users/login',
